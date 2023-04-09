@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace Catalog.API
 {
-    public class Statrup
+    public class Startup
     {
         public IConfiguration Configuration { get; }
-        public Statrup(IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -24,11 +24,11 @@ namespace Catalog.API
             services.AddControllers();
             services.AddApiVersioning();
             services.AddHealthChecks().AddMongoDb(Configuration["DatabaseSettings:ConnectionString"], "Catalog Mongo Db Health Check", HealthStatus.Degraded);
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Catalog.API", Version = "v1" }); });
+            services.AddSwaggerGen(/*c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Catalog.API", Version = "v1" }); }*/);
 
             //DI 
-            services.AddAutoMapper(typeof(Statrup));
-            services.AddMediatR(typeof(CreateProductHandler).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(CreateProductHandler).GetTypeInfo().Assembly);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddScoped<ICatalogContext,CatalogContext>();
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddScoped<IBrandRepository,ProductRepository>();
@@ -40,7 +40,7 @@ namespace Catalog.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json","Catalog.API v1"));
+                app.UseSwaggerUI(/*c => c.SwaggerEndpoint("/swagger/v1/swagger.json","Catalog.API v1")*/);
             }
             app.UseRouting();
             app.UseStaticFiles();

@@ -3,7 +3,7 @@
 namespace Catalog.API.Controllers
 {
     [ApiVersion("1")]
-    [Route("api/v1/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ApiController :ControllerBase
     {
